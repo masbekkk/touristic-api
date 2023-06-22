@@ -12,7 +12,29 @@ class PlaceController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $data = Place::all();
+        
+            if ($data->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No data found.',
+                ], 404);
+            }
+        
+            return response()->json([
+                'success' => true,
+                'message' => 'Success.',
+                'data' => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+        
     }
 
     /**
