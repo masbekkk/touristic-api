@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Interest extends Model
 {
     use HasFactory;
+    protected $keyType = 'string';
 
     public function place()
     {

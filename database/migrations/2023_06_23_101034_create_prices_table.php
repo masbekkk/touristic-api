@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('prices', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('place_id');
-            $table->enum('type', ['adult', 'kid', 'fnb', 'entry fee']);
+            $table->enum('type', ['adult', 'kid', 'fnb', 'entry']);
             $table->string('price');
             $table->foreign('place_id')->references('id')->on('places')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();

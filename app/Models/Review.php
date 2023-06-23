@@ -9,6 +9,8 @@ class Review extends Model
 {
     use HasFactory;
 
+    protected $keyType = 'string';
+
     public function place_reviewed()
     {
         return $this->belongsTo(Place::class, 'place_id', 'id');

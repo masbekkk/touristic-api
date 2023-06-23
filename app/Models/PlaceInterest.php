@@ -9,6 +9,8 @@ class PlaceInterest extends Model
 {
     use HasFactory;
 
+    // protected $keyType = 'string';
+
     public function places()
     {
         return $this->belongsTo(Place::class, 'place_id', 'id');
