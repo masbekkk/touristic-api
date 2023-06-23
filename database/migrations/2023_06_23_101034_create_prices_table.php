@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('interests', function (Blueprint $table) {
+        Schema::create('prices', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->string('name');
+            $table->string('place_id');
+            $table->enum('type', ['adult', 'kid', 'fnb', 'entry fee']);
+            $table->string('price');
+            $table->foreign('place_id')->references('id')->on('places')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('interests');
+        Schema::dropIfExists('prices');
     }
 };

@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('reviews', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('place_id')->unsigned();
+            $table->string('id')->primary();
+            $table->string('place_id');
+            $table->string('name');
             $table->text('description')->nullable();
             $table->float('rating');
             $table->foreign('place_id')->references('id')->on('places')->onUpdate('cascade')->onDelete('cascade');
