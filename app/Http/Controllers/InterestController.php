@@ -12,6 +12,15 @@ class InterestController extends Controller
      */
     public function index()
     {
+        $headers = [
+            // 'Authorization' => 'Bearer your_token',
+            'Postman-Token' => 'your_postman_token',
+            'Host' => 'example.com',
+            'User-Agent' => 'Your User Agent',
+            'Accept' => 'application/json',
+            'Accept-Encoding' => 'gzip, deflate, br',
+            'Connection' => 'keep-alive',
+        ];
         try {
             $data = Interest::all();
         
@@ -19,20 +28,20 @@ class InterestController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'No data found.',
-                ], 404);
+                ], 404, $headers);
             }
         
             return response()->json([
                 'success' => true,
                 'message' => 'Success.',
                 'data' => $data,
-            ], 200);
+            ], 200, $headers);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred.',
                 'error' => $e->getMessage(),
-            ], 500);
+            ], 500, $headers);
         }
         
         
