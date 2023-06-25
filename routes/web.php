@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/docs-api', function () {
+    return redirect('https://documenter.getpostman.com/view/16120522/2s93z6cPKW#intro');
+});
