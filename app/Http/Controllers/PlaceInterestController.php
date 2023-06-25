@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\PlaceInterest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class PlaceInterestController extends Controller
 {
@@ -13,15 +15,15 @@ class PlaceInterestController extends Controller
     public function index()
     {
         try {
-            $data = PlaceInterest::with('place', 'interest')->get();
-        
+            $data = PlaceInterest::with('places', 'interest')->get();
+            // dd($data);
             if ($data->isEmpty()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'No data found.',
                 ], 404);
             }
-        
+
             return response()->json([
                 'success' => true,
                 'message' => 'Success.',
@@ -34,7 +36,63 @@ class PlaceInterestController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
-        
+    }
+
+    public function getPlacesByInterest(Request $request)
+    {
+
+        // dd($data);
+
+        try {
+            // $data = PlaceInterest::with('places', 'interest')->whereIn('interest_id', $request->interest_id)->get();
+            $data = PlaceInterest::whereIn('interest_id', $request->interest_id)->with('places')
+                ->groupBy('place_id')
+                ->get(['place_id']);
+
+            $modifiedData = [];
+            $listInterest = [];
+
+            foreach ($data as $key => $item) {
+                $interests = PlaceInterest::where('place_id', $item->place_id)
+                    ->with('interest')
+                    ->get();
+                foreach ($interests as $interest) {
+                    $listInterest[] = $interest->interest->name;
+                }
+                $modifiedData[] = [
+                    'place_id' => $item->place_id,
+                    'name' => $item->places->name,
+                    'description' => $item->places->description,
+                    'latitude' => $item->places->latitude,
+                    'longitude' => $item->places->longitude,
+                    'interest' => $listInterest
+                ];
+                unset($listInterest);
+            }
+
+            $data = $modifiedData;
+            // dd($modifiedData);
+
+
+            if (empty($data)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No data found.',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Success.',
+                'data' => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**

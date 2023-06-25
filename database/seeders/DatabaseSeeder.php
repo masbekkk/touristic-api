@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // $this->call(InterestSeeder::class);
-        // $this->call(PlaceSeeder::class);
+        $this->call(PlaceSeeder::class);
         $this->call(PlaceInterestSeeder::class);
         // \App\Models\User::factory(10)->create();
 

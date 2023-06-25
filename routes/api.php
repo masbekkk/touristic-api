@@ -26,3 +26,5 @@ Route::resource('place', PlaceController::class);
 Route::resource('interest', InterestController::class);
 Route::resource('place-interest', PlaceInterestController::class);
 Route::resource('review', ReviewController::class);
+
+Route::post('get-place-by-interest', [PlaceInterestController::class, 'getPlacesByInterest']);
