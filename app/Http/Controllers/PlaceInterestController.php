@@ -40,9 +40,10 @@ class PlaceInterestController extends Controller
 
     public function getPlacesByInterest(Request $request)
     {
-
-        // dd($data);
-
+        // if($request->isMethod('post'))
+        // dd($request->interest_id);
+        // else dd($request->interest_id);
+    
         try {
             // $data = PlaceInterest::with('places', 'interest')->whereIn('interest_id', $request->interest_id)->get();
             $data = PlaceInterest::whereIn('interest_id', $request->interest_id)->with('places')
