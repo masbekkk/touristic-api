@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PlaceImage;
 use App\Models\PlaceInterest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -52,13 +53,21 @@ class PlaceInterestController extends Controller
 
             $modifiedData = [];
             $listInterest = [];
+            $listImages = [];
 
             foreach ($data as $key => $item) {
                 $interests = PlaceInterest::where('place_id', $item->place_id)
                     ->with('interest')
                     ->get();
+
                 foreach ($interests as $interest) {
                     $listInterest[] = $interest->interest->name;
+                }
+
+                $images = PlaceImage::where('place_id', $item->place_id)->get();
+                // dd($images->first()->image_url);
+                foreach ($images as $image) {
+                    $listImages[] = $image->image_url;
                 }
                 $modifiedData[] = [
                     'place_id' => $item->place_id,
@@ -66,7 +75,9 @@ class PlaceInterestController extends Controller
                     'description' => $item->places->description,
                     'latitude' => $item->places->latitude,
                     'longitude' => $item->places->longitude,
-                    'interest' => $listInterest
+                    'interest' => $listInterest,
+                    'images' => $listImages,
+                    // 'first_image' => $images->first()->image_url,
                 ];
                 unset($listInterest);
             }

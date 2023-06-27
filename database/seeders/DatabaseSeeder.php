@@ -14,7 +14,8 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(InterestSeeder::class);
         $this->call(PlaceSeeder::class);
-        $this->call(PlaceInterestSeeder::class);
+        // $this->call(PlaceInterestSeeder::class);
+        $this->call(PlaceImageSeeder::class);
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

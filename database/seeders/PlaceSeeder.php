@@ -51,5 +51,45 @@ class PlaceSeeder extends Seeder
     $place->latitude = -8730570;
     $place->longitude = 115167800;
     $place->save();
+
+    $place = new Place();
+    $place->id = "P13";
+    $place->name = 'p13 Bali';
+    $place->description = "With an area of about 3.8 hectares, Waterbom Bali offers exciting and unforgettable experiences for all ages. If you're the type who likes to test your guts, you should try The Climax, one of the tallest slides in Asia! With various other water rides such as Boomerang, Superbowl, Python, Open Green Viper Slide, and many others. You can also conquer artificial waves by surfing in Flow Rider. Really the right tourist spot for those of you who want to have fun with family, and of course forget all your busy life!";
+    $place->latitude = -8730570;
+    $place->longitude = 115167800;
+    $place->save();
+
+    $place = new Place();
+    $place->id = "P14";
+    $place->name = 'p15 Bali';
+    $place->description = "With an area of about 3.8 hectares, Waterbom Bali offers exciting and unforgettable experiences for all ages. If you're the type who likes to test your guts, you should try The Climax, one of the tallest slides in Asia! With various other water rides such as Boomerang, Superbowl, Python, Open Green Viper Slide, and many others. You can also conquer artificial waves by surfing in Flow Rider. Really the right tourist spot for those of you who want to have fun with family, and of course forget all your busy life!";
+    $place->latitude = -8730570;
+    $place->longitude = 115167800;
+    $place->save();
+
+    $place = new Place();
+    $place->id = "P15";
+    $place->name = 'p15 Bali';
+    $place->description = "With an area of about 3.8 hectares, Waterbom Bali offers exciting and unforgettable experiences for all ages. If you're the type who likes to test your guts, you should try The Climax, one of the tallest slides in Asia! With various other water rides such as Boomerang, Superbowl, Python, Open Green Viper Slide, and many others. You can also conquer artificial waves by surfing in Flow Rider. Really the right tourist spot for those of you who want to have fun with family, and of course forget all your busy life!";
+    $place->latitude = -8730570;
+    $place->longitude = 115167800;
+    $place->save();
+
+    $place = new Place();
+    $place->id = "P16";
+    $place->name = 'p16 Bali';
+    $place->description = "With an area of about 3.8 hectares, Waterbom Bali offers exciting and unforgettable experiences for all ages. If you're the type who likes to test your guts, you should try The Climax, one of the tallest slides in Asia! With various other water rides such as Boomerang, Superbowl, Python, Open Green Viper Slide, and many others. You can also conquer artificial waves by surfing in Flow Rider. Really the right tourist spot for those of you who want to have fun with family, and of course forget all your busy life!";
+    $place->latitude = -8730570;
+    $place->longitude = 115167800;
+    $place->save();
+
+    $place = new Place();
+    $place->id = "P17";
+    $place->name = 'p17 Bali';
+    $place->description = "With an area of about 3.8 hectares, Waterbom Bali offers exciting and unforgettable experiences for all ages. If you're the type who likes to test your guts, you should try The Climax, one of the tallest slides in Asia! With various other water rides such as Boomerang, Superbowl, Python, Open Green Viper Slide, and many others. You can also conquer artificial waves by surfing in Flow Rider. Really the right tourist spot for those of you who want to have fun with family, and of course forget all your busy life!";
+    $place->latitude = -8730570;
+    $place->longitude = 115167800;
+    $place->save();
   }
 }
