@@ -80,6 +80,7 @@ class PlaceInterestController extends Controller
                     // 'first_image' => $images->first()->image_url,
                 ];
                 unset($listInterest);
+                unset($listImages);
             }
 
             $data = $modifiedData;
