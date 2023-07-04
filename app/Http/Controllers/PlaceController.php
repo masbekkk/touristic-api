@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Place;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PlaceController extends Controller
 {
@@ -42,7 +43,19 @@ class PlaceController extends Controller
      */
     public function create()
     {
-        //
+        $csvFile = Storage::disk('local')->path('database/seeders/place_images.csv');
+        while (($data = fgetcsv($csvFile, 1000, ",")) !== FALSE) {
+            dd($data);
+            // $review = new Review();
+            // $review->id = $data[0];
+            // $review->place_id = $data[1];
+            // $review->name = "Toretto";
+            // $review->description = $data[2];
+            // $review->rating = $data[3];
+
+            // $review->save();
+        }
+        fclose($csvFile);
     }
 
     /**

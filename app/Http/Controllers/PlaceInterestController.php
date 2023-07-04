@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PlaceImage;
 use App\Models\PlaceInterest;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -44,8 +45,8 @@ class PlaceInterestController extends Controller
         // if($request->isMethod('post'))
         // dd($request->interest_id);
         // else dd($request->interest_id);
-    
-        try {
+        
+        // try {
             // $data = PlaceInterest::with('places', 'interest')->whereIn('interest_id', $request->interest_id)->get();
             $data = PlaceInterest::whereIn('interest_id', $request->interest_id)->with('places')
                 ->groupBy('place_id')
@@ -54,6 +55,7 @@ class PlaceInterestController extends Controller
             $modifiedData = [];
             $listInterest = [];
             $listImages = [];
+            $listReviews = [];
 
             foreach ($data as $key => $item) {
                 $interests = PlaceInterest::where('place_id', $item->place_id)
@@ -68,7 +70,23 @@ class PlaceInterestController extends Controller
                 // dd($images->first()->image_url);
                 foreach ($images as $image) {
                     $listImages[] = $image->image_url;
+                    
                 }
+
+                $reviews = Review::where('place_id', $item->place_id)->get();
+
+                foreach ($reviews as $review) {
+                    $listReviews[] = [
+                        'id' => $review->id,
+                        'place_id' => $review->place_id,
+                        'name' => $review->name,
+                        'description' => $review->description,
+                        'rating' => $review->rating,
+                    ];
+                }
+                // dd($listReviews);
+                $avgRatingEachPlace = $reviews->avg('rating');
+                // dd($ratings->avg('rating'));
                 $modifiedData[] = [
                     'place_id' => $item->place_id,
                     'name' => $item->places->name,
@@ -77,11 +95,17 @@ class PlaceInterestController extends Controller
                     'longitude' => $item->places->longitude,
                     'interest' => $listInterest,
                     'images' => $listImages,
+                    'reviews' => $listReviews,
+                    'avg_rating' => number_format($avgRatingEachPlace, 1),
                     // 'first_image' => $images->first()->image_url,
                 ];
+                // dd($listReviews);
                 unset($listInterest);
                 unset($listImages);
+                unset($listReviews);
             }
+            // dd($ratings);
+            // dd($ratings->avg('rating'));
 
             $data = $modifiedData;
             // dd($modifiedData);
@@ -99,13 +123,14 @@ class PlaceInterestController extends Controller
                 'message' => 'Success.',
                 'data' => $data,
             ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred.',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
+
+        // } catch (\Exception $e) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'An error occurred.',
+        //         'error' => $e->getMessage(),
+        //     ], 500);
+        // }
     }
 
     /**
