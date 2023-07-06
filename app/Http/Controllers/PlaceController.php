@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Place;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 
 class PlaceController extends Controller
@@ -15,14 +16,14 @@ class PlaceController extends Controller
     {
         try {
             $data = Place::all();
-        
+
             if ($data->isEmpty()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'No data found.',
                 ], 404);
             }
-        
+
             return response()->json([
                 'success' => true,
                 'message' => 'Success.',
@@ -35,14 +36,39 @@ class PlaceController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
-        
     }
 
     public function getPlaceById($id)
     {
-        // dd("oke");
-        $place = Place::where('id', $id)->with('interest', 'review', 'image')->first();
-        return response()->json(['data' => $place], 200);
+        try {
+            // dd("oke");
+            $place = Place::where('id', $id)->with('interest', 'review', 'image')->first()->toArray();
+            // dd($place);
+            $firstKey = array_key_first($place); // Get the first key
+
+            $newKey = 'place_id'; // Define the new key
+
+            $modifiedArray = [$newKey => $place[$firstKey]] + array_slice($place, 1, null, true); // Modify the first key
+
+            // dd($modifiedArray);
+            // $place = Place::select('id as place_id')
+            //     ->where('id', $id)
+            //     ->with('interest', 'review', 'image')
+            //     ->first();
+
+            // return response()->json(['data' => $place], 200);
+            return response()->json([
+                'success' => true,
+                'message' => 'Success.',
+                'data' => $modifiedArray,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -50,19 +76,6 @@ class PlaceController extends Controller
      */
     public function create()
     {
-        $csvFile = Storage::disk('local')->path('database/seeders/place_images.csv');
-        while (($data = fgetcsv($csvFile, 1000, ",")) !== FALSE) {
-            dd($data);
-            // $review = new Review();
-            // $review->id = $data[0];
-            // $review->place_id = $data[1];
-            // $review->name = "Toretto";
-            // $review->description = $data[2];
-            // $review->rating = $data[3];
-
-            // $review->save();
-        }
-        fclose($csvFile);
     }
 
 
@@ -80,10 +93,8 @@ class PlaceController extends Controller
      */
     public function show($id, Place $place)
     {
-        $place = Place::findOrFail($id)->with('interest', 'review', 'image');
-        return response()->json(['data' => $place], 200);
     }
-    
+
 
     /**
      * Show the form for editing the specified resource.
