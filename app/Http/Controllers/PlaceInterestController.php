@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PlaceImage;
 use App\Models\PlaceInterest;
+use App\Models\Price;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -46,7 +47,7 @@ class PlaceInterestController extends Controller
         // dd($request->interest_id);
         // else dd($request->interest_id);
         
-        // try {
+        try {
             // $data = PlaceInterest::with('places', 'interest')->whereIn('interest_id', $request->interest_id)->get();
             $data = PlaceInterest::whereIn('interest_id', $request->interest_id)->with('places')
                 ->groupBy('place_id')
@@ -56,6 +57,7 @@ class PlaceInterestController extends Controller
             $listInterest = [];
             $listImages = [];
             $listReviews = [];
+            $listPrices = [];
 
             foreach ($data as $key => $item) {
                 $interests = PlaceInterest::where('place_id', $item->place_id)
@@ -66,14 +68,14 @@ class PlaceInterestController extends Controller
                     $listInterest[] = $interest->interest->name;
                 }
 
-                $images = PlaceImage::where('place_id', $item->place_id)->get();
+                $images = PlaceImage::where('place_id', $item->place_id)->orderBy('place_id')->get();
                 // dd($images->first()->image_url);
                 foreach ($images as $image) {
                     $listImages[] = $image->image_url;
                     
                 }
 
-                $reviews = Review::where('place_id', $item->place_id)->get();
+                $reviews = Review::where('place_id', $item->place_id)->orderBy('place_id')->get();
 
                 foreach ($reviews as $review) {
                     $listReviews[] = [
@@ -84,7 +86,20 @@ class PlaceInterestController extends Controller
                         'rating' => $review->rating,
                     ];
                 }
-                // dd($listReviews);
+
+                $prices = Price::where('place_id', $item->place_id)->orderBy('place_id')->get();
+
+                foreach($prices as $price)
+                {
+                    $listPrices[] = [
+                        'id' => $price->id,
+                        'place_id' => $price->place_id,
+                        'type' => $price->type,
+                        'price' => $price->price
+                    ];
+                }
+
+                // dd($listPrices);
                 $avgRatingEachPlace = $reviews->avg('rating');
                 // dd($ratings->avg('rating'));
                 $modifiedData[] = [
@@ -97,12 +112,14 @@ class PlaceInterestController extends Controller
                     'images' => $listImages,
                     'reviews' => $listReviews,
                     'avg_rating' => number_format($avgRatingEachPlace, 1),
+                    'prices' => $listPrices,
                     // 'first_image' => $images->first()->image_url,
                 ];
                 // dd($listReviews);
                 unset($listInterest);
                 unset($listImages);
                 unset($listReviews);
+                unset($listPrices);
             }
             // dd($ratings);
             // dd($ratings->avg('rating'));
@@ -124,13 +141,13 @@ class PlaceInterestController extends Controller
                 'data' => $data,
             ], 200);
 
-        // } catch (\Exception $e) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'An error occurred.',
-        //         'error' => $e->getMessage(),
-        //     ], 500);
-        // }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
