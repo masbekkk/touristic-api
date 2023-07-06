@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Place;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class PlaceController extends Controller
@@ -41,22 +42,25 @@ class PlaceController extends Controller
     public function getPlaceById($id)
     {
         try {
-            // dd("oke");
-            $place = Place::where('id', $id)->with('interest', 'review', 'image')->first()->toArray();
-            // dd($place);
-            $firstKey = array_key_first($place); // Get the first key
+            $placeCache = Cache::get('place-' . $id);
+            // dd($placeCache);
+            if ($placeCache == null) {
+                $place = Place::where('id', $id)->with('interest', 'review', 'image')->first()->toArray();
+                // dd($place);
+                $firstKey = array_key_first($place); // Get the first key
 
-            $newKey = 'place_id'; // Define the new key
+                $newKey = 'place_id'; // Define the new key
 
-            $modifiedArray = [$newKey => $place[$firstKey]] + array_slice($place, 1, null, true); // Modify the first key
+                $modifiedArray = [$newKey => $place[$firstKey]] + array_slice($place, 1, null, true); // Modify the first key
 
-            // dd($modifiedArray);
-            // $place = Place::select('id as place_id')
-            //     ->where('id', $id)
-            //     ->with('interest', 'review', 'image')
-            //     ->first();
+                Cache::forever('place-' . $id, $modifiedArray);
+                // dd($modifiedArray);
+                // return response()->json(['data' => $place], 200);
+               
+            }else {
+                $modifiedArray = Cache::get('place-' . $id);
+            }
 
-            // return response()->json(['data' => $place], 200);
             return response()->json([
                 'success' => true,
                 'message' => 'Success.',

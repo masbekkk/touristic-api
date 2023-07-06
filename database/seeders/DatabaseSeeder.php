@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,6 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        Artisan::call('cache:clear');
         // $this->call(InterestSeeder::class);
         // $this->call(PlaceSeeder::class);
         // $this->call(PlaceInterestSeeder::class);
@@ -20,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PriceSeeder::class);
         // \App\Models\User::factory(10)->create();
 
+        
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
