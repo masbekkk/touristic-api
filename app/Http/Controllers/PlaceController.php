@@ -38,6 +38,13 @@ class PlaceController extends Controller
         
     }
 
+    public function getPlaceById($id)
+    {
+        // dd("oke");
+        $place = Place::where('id', $id)->with('interest', 'review', 'image')->first();
+        return response()->json(['data' => $place], 200);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -58,6 +65,8 @@ class PlaceController extends Controller
         fclose($csvFile);
     }
 
+
+
     /**
      * Store a newly created resource in storage.
      */
@@ -69,10 +78,12 @@ class PlaceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Place $place)
+    public function show($id, Place $place)
     {
-        //
+        $place = Place::findOrFail($id)->with('interest', 'review', 'image');
+        return response()->json(['data' => $place], 200);
     }
+    
 
     /**
      * Show the form for editing the specified resource.

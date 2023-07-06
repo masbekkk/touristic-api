@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PlaceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,3 +21,5 @@ Route::get('/', function () {
 Route::get('/docs-api', function () {
     return redirect('https://documenter.getpostman.com/view/16120522/2s93z6cPKW#intro');
 });
+
+Route::get('get-place/{id}', [PlaceController::class, 'getPlaceById']);

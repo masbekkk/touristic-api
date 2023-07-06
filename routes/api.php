@@ -26,6 +26,8 @@ Route::resource('place', PlaceController::class);
 Route::resource('interest', InterestController::class);
 Route::resource('place-interest', PlaceInterestController::class);
 Route::resource('review', ReviewController::class);
+Route::get('get-place/{id}', [PlaceController::class, 'getPlaceById']);
+
 
 Route::match(['get', 'post'], 'get-place-by-interest', [PlaceInterestController::class, 'getPlacesByInterest']);
 // Route::get('get-place-by-interest', [PlaceInterestController::class, 'getPlacesByInterest']);
