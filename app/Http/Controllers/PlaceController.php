@@ -91,7 +91,7 @@ class PlaceController extends Controller
                     ->with('interest')
                     ->get();
 
-                $modifiedData = [];
+                $modifiedData = "";
                 $listInterest = [];
                 $listImages = [];
                 $listReviews = [];
@@ -133,7 +133,7 @@ class PlaceController extends Controller
                 // dd($listPrices);
                 $avgRatingEachPlace = $reviews->avg('rating');
                 // dd($ratings->avg('rating'));
-                $modifiedData[] = [
+                $modifiedData = [
                     'place_id' => $item->id,
                     'name' => $item->name,
                     'description' => $item->description,
