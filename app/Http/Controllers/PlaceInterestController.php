@@ -49,10 +49,15 @@ class PlaceInterestController extends Controller
         
         try {
             // $data = PlaceInterest::with('places', 'interest')->whereIn('interest_id', $request->interest_id)->get();
+            if( $request->interest_id != null) {
+            // dd($request->interest_id == null);
             $data = PlaceInterest::whereIn('interest_id', $request->interest_id)->with('places')
                 ->groupBy('place_id')
                 ->get(['place_id']);
-
+            }else {
+                $data = PlaceInterest::with('places')->groupBy('place_id')->get(['place_id']);
+            }
+           
             $modifiedData = [];
             $listInterest = [];
             $listImages = [];
