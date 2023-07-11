@@ -135,8 +135,9 @@ class PlaceInterestController extends Controller
 
             if (empty($data)) {
                 return response()->json([
-                    'success' => false,
+                    'success' => true,
                     'message' => 'No data found.',
+                    'data' => [],
                 ], 404);
             }
 
