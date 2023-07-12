@@ -58,11 +58,11 @@ class PlaceInterestController extends Controller
                 $data = PlaceInterest::with('places')->groupBy('place_id')->get(['place_id']);
             }
            
-            $modifiedData = [];
-            $listInterest = [];
-            $listImages = [];
-            $listReviews = [];
-            $listPrices = [];
+            $modifiedData[] = [];
+            $listInterest[] = [];
+            $listImages[] = [];
+            $listReviews[] = [];
+            $listPrices[] = [];
 
             foreach ($data as $key => $item) {
                 $interests = PlaceInterest::where('place_id', $item->place_id)

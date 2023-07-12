@@ -7,6 +7,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReviewSeeder extends Seeder
 {
@@ -27,18 +28,22 @@ class ReviewSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
 
-        $csvFile = fopen(__DIR__ . '/reviews.csv', 'r');
-        while (($data = fgetcsv($csvFile, 1000, ",")) !== FALSE) {
+        $excelFile = storage_path('app/data-mc2.xlsx');
+        // dd($excelFile);
+        $data = Excel::toArray([], $excelFile);
+        // dd($data[0]);
+        foreach($data[2] as $row)
+        {
 
             $review = new Review();
-            $review->id = $data[0];
-            $review->place_id = $data[1];
+            $review->id = $row[0];
+            $review->place_id = $row[1];
             $review->name = "Toretto";
-            $review->description = $data[2];
-            $review->rating = $data[3];
+            $review->description = $row[2];
+            $review->rating = $row[3];
 
             $review->save();
         }
-        fclose($csvFile);
+   
     }
 }
