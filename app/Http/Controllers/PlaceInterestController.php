@@ -71,7 +71,7 @@ class PlaceInterestController extends Controller
                     ->get();
 
                 foreach ($interests as $interest) {
-                    $listInterest[] = $interest->interest->name ?? "unknown";
+                    $listInterest[] = $interest->interest_id;
                 }
 
                 $images = PlaceImage::where('place_id', $item->place_id)->orderBy('place_id')->get();

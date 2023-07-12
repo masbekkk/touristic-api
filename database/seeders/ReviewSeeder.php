@@ -38,7 +38,7 @@ class ReviewSeeder extends Seeder
             $review = new Review();
             $review->id = $row[0];
             $review->place_id = $row[1];
-            $review->name = "Toretto";
+            $review->name = $row[4];
             $review->description = $row[2];
             $review->rating = $row[3];
 

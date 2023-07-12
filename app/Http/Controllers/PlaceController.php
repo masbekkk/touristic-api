@@ -98,7 +98,7 @@ class PlaceController extends Controller
                 $listPrices = [];
 
                 foreach ($interests as $interest) {
-                    $listInterest[] = $interest->interest->name;
+                    $listInterest[] = $interest->interest_id;
                 }
 
                 $images = PlaceImage::where('place_id', $item->id)->orderBy('place_id')->get();
