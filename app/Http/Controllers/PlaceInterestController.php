@@ -47,7 +47,7 @@ class PlaceInterestController extends Controller
         // dd($request->interest_id);
         // else dd($request->interest_id);
         
-        try {
+        // try {
             // $data = PlaceInterest::with('places', 'interest')->whereIn('interest_id', $request->interest_id)->get();
             if( $request->interest_id != null) {
             // dd($request->interest_id == null);
@@ -57,12 +57,13 @@ class PlaceInterestController extends Controller
             }else {
                 $data = PlaceInterest::with('places')->groupBy('place_id')->get(['place_id']);
             }
+            // dd($data);
            
-            $modifiedData[] = [];
-            $listInterest[] = [];
-            $listImages[] = [];
-            $listReviews[] = [];
-            $listPrices[] = [];
+            $modifiedData = [];
+            $listInterest = [];
+            $listImages = [];
+            $listReviews = [];
+            $listPrices = [];
 
             foreach ($data as $key => $item) {
                 $interests = PlaceInterest::where('place_id', $item->place_id)
@@ -70,7 +71,7 @@ class PlaceInterestController extends Controller
                     ->get();
 
                 foreach ($interests as $interest) {
-                    $listInterest[] = $interest->interest->name;
+                    $listInterest[] = $interest->interest->name ?? "unknown";
                 }
 
                 $images = PlaceImage::where('place_id', $item->place_id)->orderBy('place_id')->get();
@@ -109,15 +110,19 @@ class PlaceInterestController extends Controller
                 // dd($ratings->avg('rating'));
                 $modifiedData[] = [
                     'place_id' => $item->place_id,
-                    'name' => $item->places->name,
+                    'name' => $item->places->name ?? $item->place_id,
                     'description' => $item->places->description,
                     'latitude' => $item->places->latitude,
                     'longitude' => $item->places->longitude,
                     'interest' => $listInterest,
-                    'images' => $listImages,
-                    'reviews' => $listReviews,
+                    'images' => $listImages ?? [],
+                    'reviews' => $listReviews ?? [],
                     'avg_rating' => number_format($avgRatingEachPlace, 1),
-                    'prices' => $listPrices,
+                    'prices' => $listPrices ?? [],
+                    // 'images' => $listImages ?? ['place_id' => $item->place_id],
+                    // 'reviews' => $listReviews ?? ['place_id' => $item->place_id],
+                    // 'avg_rating' => number_format($avgRatingEachPlace, 1),
+                    // 'prices' => $listPrices ?? ['place_id' => $item->place_id],
                     // 'first_image' => $images->first()->image_url,
                 ];
                 // dd($listReviews);
@@ -147,13 +152,13 @@ class PlaceInterestController extends Controller
                 'data' => $data,
             ], 200);
 
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred.',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
+        // } catch (\Exception $e) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'An error occurred.',
+        //         'error' => $e->getMessage(),
+        //     ], 500);
+        // }
     }
 
     /**
