@@ -61,7 +61,7 @@ class PlaceInterestController extends Controller
         if ($request->interest_id != null) {
             // dd($request->interest_id == null);
             $data = PlaceInterest::whereIn('interest_id', $request->interest_id)->with('places')
-                // ->groupBy('place_id')
+                ->groupBy('place_id')
                 // ->orderBy('place_id')
                 ->orderByRaw("
             CASE interest_id
