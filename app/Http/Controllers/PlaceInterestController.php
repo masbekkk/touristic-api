@@ -60,17 +60,25 @@ class PlaceInterestController extends Controller
         // $data = PlaceInterest::with('places', 'interest')->whereIn('interest_id', $request->interest_id)->get();
         if ($request->interest_id != null) {
             // dd($request->interest_id == null);
-            $data = PlaceInterest::whereIn('interest_id', $request->interest_id)->with('places')
-                ->groupBy('place_id')
-                // ->orderBy('place_id')
-                ->orderByRaw("
-            CASE interest_id
-                " . $this->generateOrderByCases($request->interest_id) . "
-                ELSE " . (count($request->interest_id) + 1) . "
-            END
-        ")
-                
-                ->get(['place_id']);
+            //     $data = PlaceInterest::whereIn('interest_id', $request->interest_id)->with('places')
+            //         ->groupBy('place_id')
+            //         // ->orderBy('place_id')
+            //         ->orderByRaw("
+            //     CASE interest_id
+            //         " . $this->generateOrderByCases($request->interest_id) . "
+            //         ELSE " . (count($request->interest_id) + 1) . "
+            //     END
+            // ")
+
+            //         ->get(['place_id']);
+
+            $data =  PlaceInterest::select('place_id')
+            ->join('places', 'place_interests.place_id', '=', 'places.id')
+            ->whereIn('interest_id', $request->interest_id)
+            ->groupBy('place_id')
+            ->orderByRaw('COUNT(*) DESC')
+            ->with('places')
+            ->get(['places.id']);
         } else {
             $data = PlaceInterest::with('places')->groupBy('place_id')->get(['place_id']);
         }
